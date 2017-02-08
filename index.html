@@ -6,17 +6,64 @@
   <title>Jobhunt Challenge</title>
   <meta name="description" content="Jobhunt Challenge">
   <meta name="author" content="Metatavu">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://cdn.metatavu.io/libs/vex/2.3.3/css/vex.css" rel="stylesheet">
+  <link href="https://cdn.metatavu.io/libs/vex/2.3.3/css/vex-theme-wireframe.css" rel="stylesheet"> 
+  <link rel="stylesheet" href="lib/codemirror.css">
+  <link rel="stylesheet" href="lib/the-matrix.css">
   <link rel="stylesheet" href="css/main.css">
   <script defer="defer" src="https://cdn.metatavu.io/libs/jquery/3.1.1/jquery.min.js"></script>
   <script defer="defer" src="https://cdn.metatavu.io/libs/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+  <script defer="defer" src="https://cdn.metatavu.io/libs/vex/2.3.3/js/vex.combined.min.js"></script>
   <script defer="defer" src="https://cdn.metatavu.io/libs/async/2.1.4/async.min.js"></script>
-  <script defer="defer" src="https://cdn.metatavu.io/libs/metagame/0.0.1/metagame.min.js"></script>
+  <script defer="defer" src="https://cdn.metatavu.io/libs/noty/2.4.0/jquery.noty.packaged.min.js"></script>
+  <script defer="defer" src="https://cdn.metatavu.io/libs/metagame/0.0.2/metagame.min.js"></script>
+  <script defer="defer" src="lib/codemirror.js"></script>
+  <script defer="defer" src="lib/javascript.js"></script>
+  <script defer="defer" src="js/code-mirror.js"></script>
   <script defer="defer" src="js/main.js"></script>
 </head>
 <body>
-  <div id="game">
+  <div class="container">
+    <h1>Jobhunt Challenge</h1>
+    <p>Idea of this challenge is to provide function which will help @ character to get to █ without hitting # characters. ░-characters repserent free space.</p>
+    <div id="game"></div>
+    <button class="btn" id="start">Start</button>
+    <button class="btn" id="stop">Stop</button>
   </div>
-  <button id="start">Start</button>
-  <button id="stop">Stop</button>
+  <div class="editor-container">
+    <textarea id="code-editor">
+/* 
+  Specify function which is used to control movement of @. When you press "start" - button function will be called until
+  @ hits to wall(#) or goal(█) or "stop" - button is pressed. Function will have 2 parameters, map and player.
+  
+  Map object has following methods:
+  map.collidesWithWall({x: 1, y: 1}); --> returns true of given position collides with # otherwise false
+  map.collidesWithGoal({x: 1, y: 1}); --> returns true if given position collides with █ otherwise false
+  map.getArray(); --> returns 2 dimensional array representing map where 0 = ░, 1 = # and 2 = █
+
+  Player object has following methods:
+  player.moveUp(); --> Moves player up (makes y smaller)
+  player.moveDown(); --> Moves player up (makes y larger)
+  player.moveRight(); --> Moves player right (makes x larger)
+  player.moveLeft(); --> Moves player left (makes x smaller)
+  player.getPosition(); --> returns current position of @ in format {x: 1, y: 1}
+*/
+
+function update(map, player) {
+  var a = map.getArray();
+  var p = player.getPosition();
+  if(!map.collidesWithWall({x: p.x, y: p.y + 1})) {
+    player.moveDown();
+  } else {
+    if(!map.collidesWithWall({x: p.x + 1, y: p.y})) {
+      player.moveRight();
+    } else {
+ 	  player.moveLeft(); 
+    } 
+  }
+}
+      </textarea>
+  </div>
 </body>
 </html>
