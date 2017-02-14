@@ -26,17 +26,24 @@
 <body>
   <div class="container">
     <h1>Jobhunt Challenge</h1>
-    <p>Idea of this challenge is to provide function which will help @ character to get to █ without hitting # characters. ░-characters repserent free space.</p>
+    <p>Idea of this challenge is to provide function which will help @ character to get to █ without hitting # characters. ░-characters represent free space.</p>
     <div id="game"></div>
     <button class="btn" id="start">Start</button>
     <button class="btn" id="stop">Stop</button>
+    <br/>
+    <button class="btn" id="giveup">Give up</button>
+    <button class="btn" id="resetcode">Reset</button>
   </div>
   <div class="editor-container">
     <textarea id="code-editor">
 /* 
-  Specify function which is used to control movement of @. When you press "start" - button function will be called until
-  @ hits to wall(#) or goal(█) or "stop" - button is pressed. Function will have 2 parameters, map and player.
+  Specify function called "update" which is used to control movement of @. 
+  When you press "start" - button function will be called until  @ hits to wall(#) or goal(█) or "stop" - button is pressed.
   
+  You can also use helper variables that keep their state between function executions. 
+  If you need to check the contents of variable you can use console.log function and inspect variables with web console.
+
+  Function will have 2 parameters, map and player.
   Map object has following methods:
   map.collidesWithWall({x: 1, y: 1}); --> returns true of given position collides with # otherwise false
   map.collidesWithGoal({x: 1, y: 1}); --> returns true if given position collides with █ otherwise false
@@ -50,16 +57,19 @@
   player.getPosition(); --> returns current position of @ in format {x: 1, y: 1}
 */
 
+var direction = 'down';
+
 function update(map, player) {
   var a = map.getArray();
   var p = player.getPosition();
-  if(!map.collidesWithWall({x: p.x, y: p.y + 1})) {
+  if(!map.collidesWithWall({x: p.x, y: p.y + 1}) && direction == 'down') {
     player.moveDown();
   } else {
+    direction = 'up';
     if(!map.collidesWithWall({x: p.x + 1, y: p.y})) {
       player.moveRight();
     } else {
- 	  player.moveLeft(); 
+ 	  player.moveUp(); 
     } 
   }
 }
